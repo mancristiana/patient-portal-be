@@ -1,0 +1,33 @@
+{
+  "name": "patient-portal-be",
+  "version": "0.0.1",
+  "description": "Backend for Patient Portal. ",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js",
+    "dev": "./node_modules/.bin/nodemon index.js"
+  },
+  "engines": {
+    "node": "9.3.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mancristiana/patient-portal-be.git"
+  },
+  "author": "Man Cristiana",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mancristiana/patient-portal-be/issues"
+  },
+  "homepage": "https://github.com/mancristiana/patient-portal-be#readme",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "cors": "^2.8.4",
+    "express": "^4.16.3",
+    "express-jwt": "^5.3.1"
+  },
+  "devDependencies": {
+    "nodemon": "^1.17.4"
+  }
+}
