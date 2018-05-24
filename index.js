@@ -1,5 +1,5 @@
-require('./config/config'); //instantiate configuration variables
-//require('./globalFunctions'); //instantiate global functions
+require('./utils/globals'); // instantiate global functions
+require('./config/config'); // instantiate configuration variables
 
 const bodyParser = require('body-parser');
 const cors = require('cors');
