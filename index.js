@@ -11,6 +11,7 @@ const notFoundHandler = require('./utils/notFoundHandler');
 
 // App modules
 const routes = require('./routes');
+const models = require('./models');
 
 const app = express();
 
