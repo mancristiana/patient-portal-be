@@ -1,15 +1,18 @@
-'use strict';
+require('./config/config'); //instantiate configuration variables
+//require('./globalFunctions'); //instantiate global functions
 
-const express = require('express');
-const app = express();
-const jwt = require('express-jwt');
-const cors = require('cors');
 const bodyParser = require('body-parser');
+const cors = require('cors');
+const express = require('express');
 
-/**
- * Import app routes
- */
-// const doctors = require('./routes/doctors.js');
+// Utils
+const errorHandler = require('./utils/errorHandler');
+const notFoundHandler = require('./utils/notFoundHandler');
+
+// App modules
+const routes = require('./routes');
+
+const app = express();
 
 // Use body-parsing middleware for JSON like experience with URL-encoded
 // Extended syntax uses qs library (when true) and querystring library (when false)
@@ -19,10 +22,10 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // TODO safe cors config
 app.use(cors());
 
-// Use middleware which serves files from given 'public' directory
-app.use(express.static('./public'));
+app.use('/', routes);
 
-// For specified path use required modules
-//app.use('/api/doctors/', doctors);
+// Use Handlers
+app.use(notFoundHandler);
+app.use(errorHandler);
 
-app.listen(process.env.PORT || 5000);
+app.listen(CONFIG.PORT);
