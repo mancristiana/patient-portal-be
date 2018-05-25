@@ -1,4 +1,4 @@
-require('./utils/globals'); // instantiate global functions
+require('./src/utils/globals'); // instantiate global functions
 require('./config/config'); // instantiate configuration variables
 
 const bodyParser = require('body-parser');
@@ -6,11 +6,11 @@ const cors = require('cors');
 const express = require('express');
 
 // Utils
-const handlers = require('./utils/handlers');
+const handlers = require('./src/utils/handlers');
 
 // App modules
-const routes = require('./routes');
-const models = require('./models');
+const routes = require('./src/routes');
+const models = require('./src/models');
 
 const app = express();
 
