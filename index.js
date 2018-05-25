@@ -6,8 +6,7 @@ const cors = require('cors');
 const express = require('express');
 
 // Utils
-const errorHandler = require('./utils/errorHandler');
-const notFoundHandler = require('./utils/notFoundHandler');
+const handlers = require('./utils/handlers');
 
 // App modules
 const routes = require('./routes');
@@ -26,7 +25,7 @@ app.use(cors());
 app.use('/', routes);
 
 // Use Handlers
-app.use(notFoundHandler);
-app.use(errorHandler);
+app.use(handlers.notFound);
+app.use(handlers.error);
 
 app.listen(CONFIG.PORT);
