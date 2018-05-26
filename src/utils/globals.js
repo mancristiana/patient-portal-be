@@ -7,9 +7,9 @@ const parseError = require('parse-error'); // Parses error so you can read error
 to = function(promise) {
   return promise
     .then(data => {
-      return [null, data];
+      return [data, null];
     })
-    .catch(error => [parseError(error)]);
+    .catch(error => [null, parseError(error)]);
 };
 
 throwError = function(errorMessage, log) {
