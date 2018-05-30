@@ -1,7 +1,5 @@
 const Speciality = require('../models').Speciality;
 const getAll = async function(req, res) {
-  res.setHeader('Content-Type', 'application/json');
-
   let error, specialities;
   [specialities, error] = await to(Speciality.find());
 

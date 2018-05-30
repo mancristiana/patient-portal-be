@@ -16,6 +16,6 @@ db.on('error', error => {
 
 module.exports = {
   db: db,
-  Speciality: require('./speciality')
-  //User: require('./user'),
+  Speciality: require('./speciality'),
+  User: require('./user')
 };
