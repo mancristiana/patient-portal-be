@@ -4,6 +4,7 @@ require('./config/config'); // instantiate configuration variables
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const express = require('express');
+const helmet = require('helmet');
 
 // Utils
 const handlers = require('./src/utils/handlers');
@@ -21,6 +22,9 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 // TODO safe cors config
 app.use(cors());
+
+// See: https://expressjs.com/en/advanced/best-practice-security.html
+app.use(helmet());
 
 app.use('/', routes);
 
