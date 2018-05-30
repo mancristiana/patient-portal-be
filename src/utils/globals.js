@@ -24,10 +24,11 @@ throwError = function(errorMessage, log) {
 responseError = function(res, err, code) {
   let errorMessage = err && err.message ? err.message : 'Internal Server Error';
   let result = {
-    success: true,
+    success: false,
     error: errorMessage
   };
 
+  res.setHeader('Content-Type', 'application/json');
   res.statusCode = code || 500;
 
   return res.json(result);
@@ -40,6 +41,7 @@ responseSuccess = function(res, data, code) {
     data: data
   };
 
+  res.setHeader('Content-Type', 'application/json');
   res.statusCode = code || 200;
 
   return res.json(result);
