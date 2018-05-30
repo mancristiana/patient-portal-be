@@ -11,3 +11,13 @@ if (!CONFIG.DB_URI) {
     true
   );
 }
+
+// Argon configuration
+CONFIG.ARGON_TIMECOST = process.env.ARGON_TIMECOST || 40;
+CONFIG.ARGON_MEMORY = process.env.ARGON_MEMORY || 128000;
+CONFIG.ARGON_PARALLELISM = process.env.ARGON_PARALLELISM || 4;
+
+CONFIG.JWT_ENCRYPTION = process.env.JWT_ENCRYPTION;
+CONFIG.JWT_EXPIRATION = process.env.JWT_EXPIRATION;
+
+console.log('CONFIG', CONFIG);
