@@ -17,5 +17,6 @@ db.on('error', error => {
 module.exports = {
   db: db,
   Speciality: require('./speciality'),
-  User: require('./user')
+  User: require('./user'),
+  Doctor: require('./doctor')
 };
