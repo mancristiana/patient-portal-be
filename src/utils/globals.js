@@ -2,7 +2,7 @@
 // See: http://blog.grossman.io/how-to-write-async-await-without-try-catch-blocks-in-javascript/
 
 const parseError = require('parse-error'); // Parses error so you can read error message and handle them accordingly
-
+const getErrorMessage = require('./errorMessages');
 // Global function that handles promise rejections
 to = function(promise) {
   return promise
@@ -22,14 +22,16 @@ throwError = function(errorMessage, log) {
 
 // Error Web Response
 responseError = function(res, err, code) {
-  let errorMessage = err && err.message ? err.message : 'Internal Server Error';
+  res.setHeader('Content-Type', 'application/json');
+  res.statusCode = code || 500;
+
+  let errorMessage = err && err.message ? err.message : '';
+  errorMessage = getErrorMessage(res.statusCode) + errorMessage;
+
   let result = {
     success: false,
     error: errorMessage
   };
-
-  res.setHeader('Content-Type', 'application/json');
-  res.statusCode = code || 500;
 
   return res.json(result);
 };

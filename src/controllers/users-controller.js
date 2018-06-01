@@ -31,18 +31,30 @@ module.exports.register = register;
 
 const login = async function(req, res) {
   if (!hasFields(req, ['email', 'password'])) {
-    return responseError(res, null, 400);
+    return responseError(
+      res,
+      { message: 'Provided credentials are incorrect' },
+      400
+    );
   }
 
   let error, user, correct, response;
   [user, error] = await to(User.findOne({ email: req.body.email }));
   // User was not found
   if (error) {
-    return responseError(res, null, 401);
+    return responseError(
+      res,
+      { message: 'Provided credentials are incorrect' },
+      401
+    );
   }
   [correct, error] = await to(user.verifyPassword(req.body.password));
   if (!correct) {
-    return responseError(res, null, 401);
+    return responseError(
+      res,
+      { message: 'Provided credentials are incorrect' },
+      401
+    );
   }
   response = { jwt: AuthController.getJWT(user._id) };
   return responseSuccess(res, response);
