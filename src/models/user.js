@@ -57,7 +57,7 @@ userSchema.methods.hashPassword = async function(password) {
 
 // Check if password matches the password in the database
 userSchema.methods.verifyPassword = async function(password) {
-  const hash = this.local.password;
+  const hash = this.password;
   let match, error;
   [match, error] = await to(argon2.verify(hash, password));
   if (error) {
@@ -67,9 +67,27 @@ userSchema.methods.verifyPassword = async function(password) {
 };
 
 userSchema.methods.getJWT = function() {
-  return jwt.sign({ user_id: this._id }, CONFIG.JWT_ENCRYPTION, {
+  let token = jwt.sign({ user_id: this._id }, CONFIG.JWT_SECRET, {
+    algorithm: CONFIG.JWT_ENCRYPTION,
     expiresIn: CONFIG.JWT_EXPIRATION
   });
+  console.log('Toko', token);
+  return token;
+};
+
+userSchema.statics.verifyJWT = function(token) {
+  try {
+    let user = jwt.verify(token, CONFIG.JWT_SECRET);
+    return {
+      success: true,
+      payload: user
+    };
+  } catch (e) {
+    return {
+      success: false,
+      error: e.message
+    };
+  }
 };
 
 userSchema.methods.toWeb = function() {
