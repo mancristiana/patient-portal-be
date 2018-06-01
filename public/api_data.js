@@ -46,7 +46,7 @@ define({ "api": [
       ]
     },
     "version": "0.0.0",
-    "filename": "routes/docsTest.js",
+    "filename": "src/routes/docs-test.js",
     "groupTitle": "User",
     "error": {
       "fields": {
@@ -111,7 +111,7 @@ define({ "api": [
       ]
     },
     "version": "0.0.0",
-    "filename": "routes/docsTest.js",
+    "filename": "src/routes/docs-test.js",
     "groupTitle": "User",
     "error": {
       "fields": {
@@ -132,5 +132,69 @@ define({ "api": [
         }
       ]
     }
+  },
+  {
+    "type": "get",
+    "url": "/api/users",
+    "title": "Get User",
+    "name": "get_user",
+    "group": "users",
+    "version": "1.0.0",
+    "description": "<p>This request returns a user from ID</p>",
+    "success": {
+      "fields": {
+        "User Fields": [
+          {
+            "group": "User Fields",
+            "type": "String",
+            "optional": false,
+            "field": "_id",
+            "description": "<p>Unique Mongo generated id of the User.</p>"
+          },
+          {
+            "group": "User Fields",
+            "type": "String",
+            "optional": false,
+            "field": "email",
+            "description": "<p>Email of the User.</p>"
+          },
+          {
+            "group": "User Fields",
+            "type": "int",
+            "optional": false,
+            "field": "nationalID",
+            "description": "<p>NationalID of the User.</p>"
+          },
+          {
+            "group": "User Fields",
+            "type": "String",
+            "optional": false,
+            "field": "phone",
+            "description": "<p>Phone of the User.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n[\n    {\n        \"_id\": \"573ec098e85f5601f611322b\",\n        \"Email\": \"preprem@gmail.com\",\n        \"phone\": \"+45 27 29 29 64\"\n    },\n    {\n        \"_id\": \"573ec098e85f5601f611322b\",\n        \"Email\": \"dadasd@gmail.com\",\n        \"phone\": \"+45 63 63 63 63\"\n    }\n]",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 5xx": [
+          {
+            "group": "Error 5xx",
+            "optional": false,
+            "field": "500",
+            "description": "<p>Internal Server Error</p>"
+          }
+        ]
+      }
+    },
+    "filename": "src/controllers/users-controller.js",
+    "groupTitle": "users"
   }
 ] });
