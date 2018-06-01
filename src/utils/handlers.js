@@ -1,7 +1,5 @@
 const notFound = function(req, res, next) {
-  var err = new Error('Not Found');
-  err.status = 404;
-  next(err);
+  return responseError(res, { message: 'Route not found' }, 404);
 };
 
 const error = function(err, req, res, next) {

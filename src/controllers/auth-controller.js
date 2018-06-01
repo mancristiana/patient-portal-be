@@ -1,4 +1,37 @@
 const jwt = require('jsonwebtoken');
+const User = require('../models').User;
+const { hasFields } = require('./../utils/requestValidator');
+
+module.exports.login = async function(req, res) {
+  if (!hasFields(req, ['email', 'password'])) {
+    return responseError(
+      res,
+      { message: 'Make sure email and passoword are specified.' },
+      400
+    );
+  }
+
+  let error, user, correct, response;
+  [user, error] = await to(User.findOne({ email: req.body.email }));
+  // User was not found
+  if (error) {
+    return responseError(
+      res,
+      { message: 'Provided credentials are incorrect' },
+      401
+    );
+  }
+  [correct, error] = await to(user.verifyPassword(req.body.password));
+  if (!correct) {
+    return responseError(
+      res,
+      { message: 'Provided credentials are incorrect' },
+      401
+    );
+  }
+  response = { jwt: getJWT(user._id) };
+  return responseSuccess(res, response);
+};
 
 module.exports.authenticate = function(req, res, next) {
   let authHeader = req.get('Authorization');

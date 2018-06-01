@@ -1,8 +1,6 @@
 const User = require('../models').User;
-const { hasFields } = require('./../utils/requestValidator');
-const AuthController = require('./auth-controller');
 
-const register = async function(req, res) {
+module.exports.createUser = async function(req, res) {
   let error, user, response;
   const newUser = new User(req.body);
   [user, error] = await to(newUser.save());
@@ -23,52 +21,82 @@ const register = async function(req, res) {
     return responseError(res, error);
   }
 
-  response = { jwt: AuthController.getJWT(user._id) };
-
-  return responseSuccess(res, response);
+  return responseSuccess(res, null);
 };
-module.exports.register = register;
 
-const login = async function(req, res) {
-  if (!hasFields(req, ['email', 'password'])) {
-    return responseError(
-      res,
-      { message: 'Provided credentials are incorrect' },
-      400
-    );
-  }
+/**
+ * @api {get} /api/users Get User
+ * @apiName get-user
+ * @apiGroup users
+ * @apiVersion 1.0.0
+ *
+ * @apiDescription This request returns a user from ID
+ *
+ * @apiSuccess (User Fields) {String} _id Unique Mongo generated id of the User.
+ * @apiSuccess (User Fields) {String} email Email of the User.
+ * @apiSuccess (User Fields) {int} nationalID NationalID of the User.
+ * @apiSuccess (User Fields) {String} phone Phone of the User.
+ *
+ * @apiSuccessExample {json} Success-Response:
+ *   HTTP/1.1 200 OK
+ *   [
+ *       {
+ *           "_id": "573ec098e85f5601f611322b",
+ *           "Email": "preprem@gmail.com",
+ *           "phone": "+45 27 29 29 64"
+ *       },
+ *       {
+ *           "_id": "573ec098e85f5601f611322b",
+ *           "Email": "dadasd@gmail.com",
+ *           "phone": "+45 63 63 63 63"
+ *       }
+ *   ]
+ *
+ * @apiError (Error 5xx) 500 Internal Server Error
+ *
+ */
 
-  let error, user, correct, response;
-  [user, error] = await to(User.findOne({ email: req.body.email }));
-  // User was not found
-  if (error) {
-    return responseError(
-      res,
-      { message: 'Provided credentials are incorrect' },
-      401
-    );
-  }
-  [correct, error] = await to(user.verifyPassword(req.body.password));
-  if (!correct) {
-    return responseError(
-      res,
-      { message: 'Provided credentials are incorrect' },
-      401
-    );
-  }
-  response = { jwt: AuthController.getJWT(user._id) };
-  return responseSuccess(res, response);
-};
-module.exports.login = login;
-
-const getUser = async function(req, res) {
-  let error, user, correct, response;
+module.exports.getUser = async function(req, res) {
+  let error, user;
   [user, error] = await to(User.findOne({ _id: req.userId }));
+  if (error) {
+    return responseError(res, error);
+  }
+
+  if (!user) {
+    return responseError(res, { message: 'User was not found' }, 404);
+  }
+
+  return responseSuccess(res, user.getProfile());
+};
+
+module.exports.updateUser = async function(req, res) {
+  let error, result;
+  [result, error] = await to(
+    User.update({ _id: req.userId }, { $set: req.body })
+  );
+  if (error) {
+    return responseError(res, error);
+  }
+
+  if (result.n === 0) {
+    return responseError(res, { message: 'User was not found' }, 404);
+  }
+
+  return responseSuccess(res, null);
+};
+
+module.exports.deleteUser = async function(req, res) {
+  let error, result;
+  [result, error] = await to(User.deleteOne({ _id: req.userId }));
   // User was not found
   if (error) {
     return responseError(res, error);
   }
 
-  return responseSuccess(res, user.getProfile());
+  if (result.n === 0) {
+    return responseError(res, { message: 'User was not found' }, 404);
+  }
+
+  return responseSuccess(res, null, 204);
 };
-module.exports.getUser = getUser;

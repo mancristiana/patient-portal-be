@@ -1,8 +1,6 @@
 const validate = require('mongoose-validator');
 const uniqueValidator = require('mongoose-unique-validator');
-const {
-  validateNorwegianIdNumber
-} = require('norwegian-national-id-validator');
+const moment = require('moment');
 
 module.exports.uniqueValidator = uniqueValidator;
 
@@ -26,6 +24,11 @@ module.exports.phone = [
     message: 'Phone should have {ARGS[0]} numbers'
   })
 ];
+
+const validateNorwegianIdNumber = function(value) {
+  let date = value.slice(0, 6);
+  return moment(date, 'DDMMYY', true).isValid();
+};
 
 module.exports.nationalId = [
   validate({

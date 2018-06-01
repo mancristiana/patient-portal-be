@@ -8,12 +8,14 @@ const {
 } = require('./../controllers');
 const auth = AuthController.authenticate;
 
-router.route('/api/users').post(UsersController.register);
-router.route('/api/users/login').post(UsersController.login);
+router.route('/auth').post(AuthController.login);
 
-router.route('/api/users').get(auth, UsersController.getUser);
-//.put(UsersController.updateUser)
-//.delete(UsersController.deleteUser);
+router
+  .route('/api/users')
+  .post(UsersController.createUser)
+  .get(auth, UsersController.getUser)
+  .put(auth, UsersController.updateUser)
+  .delete(auth, UsersController.deleteUser);
 
 router.route('/api/specialities').get(SpecialitiesController.getAll);
 

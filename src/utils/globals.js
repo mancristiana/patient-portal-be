@@ -39,9 +39,11 @@ responseError = function(res, err, code) {
 // Success Web Response
 responseSuccess = function(res, data, code) {
   let result = {
-    success: true,
-    data: data
+    success: true
   };
+  if (data) {
+    result.data = data;
+  }
 
   res.setHeader('Content-Type', 'application/json');
   res.statusCode = code || 200;
