@@ -5,7 +5,7 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const express = require('express');
 const helmet = require('helmet');
-const morgan = require('morgan');
+const logger = require('morgan');
 
 // Utils
 const handlers = require('./src/utils/handlers');
@@ -21,25 +21,13 @@ const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// TODO safe cors config
 app.use(cors());
 
 // See: https://expressjs.com/en/advanced/best-practice-security.html
 app.use(helmet());
 
 // See: https://expressjs.com/en/resources/middleware/morgan.html
-// Set morgan to log differently depending on the environment
-if (CONFIG.APP === 'development') {
-  app.use(morgan('dev'));
-} else {
-  app.use(
-    morgan('common', {
-      skip: function(req, res) {
-        return res.statusCode < 400;
-      }
-    })
-  );
-}
+app.use(logger('common'));
 
 app.use('/', routes);
 
