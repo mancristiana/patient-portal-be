@@ -66,34 +66,14 @@ userSchema.methods.verifyPassword = async function(password) {
   return match;
 };
 
-userSchema.methods.getJWT = function() {
-  let token = jwt.sign({ user_id: this._id }, CONFIG.JWT_SECRET, {
-    algorithm: CONFIG.JWT_ENCRYPTION,
-    expiresIn: CONFIG.JWT_EXPIRATION
-  });
-  console.log('Toko', token);
-  return token;
-};
-
-userSchema.statics.verifyJWT = function(token) {
-  try {
-    let user = jwt.verify(token, CONFIG.JWT_SECRET);
-    return {
-      success: true,
-      payload: user
-    };
-  } catch (e) {
-    return {
-      success: false,
-      error: e.message
-    };
-  }
-};
-
-userSchema.methods.toWeb = function() {
-  let json = {};
-  json.name = this.name;
-  return json;
+userSchema.methods.getProfile = function() {
+  return {
+    name: this.name,
+    email: this.email,
+    nationalId: this.nationalId,
+    phone: this.phone,
+    address: this.address
+  };
 };
 
 // Create the model for users and expose it to our app

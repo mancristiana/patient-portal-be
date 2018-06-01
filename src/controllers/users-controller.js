@@ -60,3 +60,15 @@ const login = async function(req, res) {
   return responseSuccess(res, response);
 };
 module.exports.login = login;
+
+const getUser = async function(req, res) {
+  let error, user, correct, response;
+  [user, error] = await to(User.findOne({ _id: req.userId }));
+  // User was not found
+  if (error) {
+    return responseError(res, error);
+  }
+
+  return responseSuccess(res, user.getProfile());
+};
+module.exports.getUser = getUser;
