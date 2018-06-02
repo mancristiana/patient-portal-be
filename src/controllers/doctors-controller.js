@@ -4,6 +4,42 @@ const regex = function(value) {
   return new RegExp(`.*${value}.*`, 'i');
 };
 
+/**
+ * @api {get} api/doctors Search Doctors
+ * @apiName search-doctors
+ * @apiGroup Doctors
+ * @apiVersion 1.0.0
+ *
+ * @apiDescription This endpoint returns a list of doctors satisfying the search filters and queries specified in the request.
+ *
+ * @apiParam {String} [query]       Doctor's name.
+ * @apiParam {String} [city]        City or any part of the address.
+ * @apiParam {String} [speciality]  Doctor's speciality
+ *
+ * @apiSuccess (Success 2xx) 200 OK
+ * @apiSuccessExample {json} Success-Response:
+ * HTTP/1.1 200 OK
+ * {
+ *    "success": true,
+ *    "data": [
+ *        {
+ *            "_id": "5b1294ec3924ee271838b530",
+ *            "name": "John Doe",
+ *            "speciality": {
+ *                "_id": "5afec038c10c3f372c71cdf3",
+ *                "name": "Allergists"
+ *            },
+ *            "clinic": "Lege",
+ *            "address": "Stranden 89, 0250 Oslo Norway",
+ *            "phone": "94161140"
+ *        }
+ *    ]
+ * }
+ *
+ * @apiError (Error 4xx) 404 No doctors were found. Please adjust your search query.
+ * @apiError (Error 5xx) 500 Internal Server Error
+ *
+ */
 module.exports.search = async function(req, res) {
   const queryParam = req.param('query');
   const cityParam = req.param('city');
@@ -32,8 +68,49 @@ module.exports.search = async function(req, res) {
     );
   }
 
+  if (!doctors || doctors.length === 0) {
+    return responseError(
+      res,
+      { message: 'No doctors were found. Please adjust your search query.' },
+      404
+    );
+  }
+
   return responseSuccess(res, doctors);
 };
+
+/**
+ * @api {get} api/doctor/:id Get Doctor by Id
+ * @apiName get-doctor-by-id
+ * @apiGroup Doctors
+ * @apiVersion 1.0.0
+ *
+ * @apiDescription This endpoint returns the doctors with the specified unique id.
+ *
+ * @apiParam {String} id       Doctor's unique id.
+ *
+ * @apiSuccess (Success 2xx) 200 OK
+ * @apiSuccessExample {json} Success-Response:
+ * HTTP/1.1 200 OK
+ * {
+ *    "success": true,
+ *    "data": {
+ *        "_id": "5b1294ec3924ee271838b530",
+ *        "name": "John Doe",
+ *        "speciality": {
+ *            "_id": "5afec038c10c3f372c71cdf3",
+ *            "name": "Allergists"
+ *        },
+ *        "clinic": "Lege",
+ *        "address": "Stranden 89, 0250 Oslo Norway",
+ *        "phone": "94161140"
+ *    }
+ * }
+ *
+ * @apiError (Error 4xx) 404 Doctor was not found.
+ * @apiError (Error 5xx) 500 Internal Server Error
+ *
+ */
 
 module.exports.getDoctor = async function(req, res) {
   const doctorId = req.param('id');

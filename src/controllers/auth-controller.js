@@ -2,6 +2,39 @@ const jwt = require('jsonwebtoken');
 const User = require('../models').User;
 const { hasFields } = require('./../utils/requestValidator');
 
+/**
+ * @api {post} auth Login
+ * @apiName login
+ * @apiGroup Authentication
+ * @apiVersion 1.0.0
+ *
+ * @apiDescription This endpoint validates user credentials and provides a signed <code>Json Web Token.</code>
+ *
+ * This token can be sent in <code>Authorization</code> header of future requests to gain access to protected resources such as user profile and appointments.
+ *
+ * The API uses the Bearer authentication scheme meaning headers of protected resources must include <code>Authorization: Bearer token</code>
+ *
+ * @apiParamExample {json} Request body
+ * {
+ *     "email": "test@test.com",
+ *     "password": "qwer1234",
+ * }
+ *
+ * @apiSuccess (Success 2xx) 200 OK
+ * @apiSuccessExample {json} Success-Response:
+ * HTTP/1.1 200 OK
+ * {
+ *     "success": true,
+ *     "data": {
+ *         "jwt": "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjViMTE3MDRhYzVlNDM2MDE2ODBkMzgxZCIsImlhdCI6MTUyNzk1ODUwMiwiZXhwIjoxNTI3OTYyMTAyfQ.V9ch6KWmJ8f65qEeD7qPeSUm2z1mjPRm-HsO0WQq-eNCR1fBz_ej4UgVCYfJJ_yXDeq0Wmytwy1TYZcBNdn-LA"
+ *     }
+ * }
+ *
+ * @apiError (Error 4xx) 400 Bad request. Email and password must be specified
+ * @apiError (Error 4xx) 401 Unauthorized. Incorrect credentials
+ * @apiError (Error 5xx) 500 Internal Server Error
+ *
+ */
 module.exports.login = async function(req, res) {
   if (!hasFields(req, ['email', 'password'])) {
     return responseError(

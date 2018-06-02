@@ -1,5 +1,210 @@
 define({ "api": [
   {
+    "type": "post",
+    "url": "auth",
+    "title": "Login",
+    "name": "login",
+    "group": "Authentication",
+    "version": "1.0.0",
+    "description": "<p>This endpoint validates user credentials and provides a signed <code>Json Web Token.</code></p> <p>This token can be sent in <code>Authorization</code> header of future requests to gain access to protected resources such as user profile and appointments.</p> <p>The API uses the Bearer authentication scheme meaning headers of protected resources must include <code>Authorization: Bearer token</code></p>",
+    "parameter": {
+      "examples": [
+        {
+          "title": "Request body",
+          "content": "{\n    \"email\": \"test@test.com\",\n    \"password\": \"qwer1234\",\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "success": {
+      "fields": {
+        "Success 2xx": [
+          {
+            "group": "Success 2xx",
+            "optional": false,
+            "field": "200",
+            "description": "<p>OK</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n    \"success\": true,\n    \"data\": {\n        \"jwt\": \"eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjViMTE3MDRhYzVlNDM2MDE2ODBkMzgxZCIsImlhdCI6MTUyNzk1ODUwMiwiZXhwIjoxNTI3OTYyMTAyfQ.V9ch6KWmJ8f65qEeD7qPeSUm2z1mjPRm-HsO0WQq-eNCR1fBz_ej4UgVCYfJJ_yXDeq0Wmytwy1TYZcBNdn-LA\"\n    }\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "400",
+            "description": "<p>Bad request. Email and password must be specified</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "401",
+            "description": "<p>Unauthorized. Incorrect credentials</p>"
+          }
+        ],
+        "Error 5xx": [
+          {
+            "group": "Error 5xx",
+            "optional": false,
+            "field": "500",
+            "description": "<p>Internal Server Error</p>"
+          }
+        ]
+      }
+    },
+    "filename": "src/controllers/auth-controller.js",
+    "groupTitle": "Authentication"
+  },
+  {
+    "type": "get",
+    "url": "api/doctor/:id",
+    "title": "Get Doctor by Id",
+    "name": "get_doctor_by_id",
+    "group": "Doctors",
+    "version": "1.0.0",
+    "description": "<p>This endpoint returns the doctors with the specified unique id.</p>",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "id",
+            "description": "<p>Doctor's unique id.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 2xx": [
+          {
+            "group": "Success 2xx",
+            "optional": false,
+            "field": "200",
+            "description": "<p>OK</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n   \"success\": true,\n   \"data\": {\n       \"_id\": \"5b1294ec3924ee271838b530\",\n       \"name\": \"John Doe\",\n       \"speciality\": {\n           \"_id\": \"5afec038c10c3f372c71cdf3\",\n           \"name\": \"Allergists\"\n       },\n       \"clinic\": \"Lege\",\n       \"address\": \"Stranden 89, 0250 Oslo Norway\",\n       \"phone\": \"94161140\"\n   }\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "404",
+            "description": "<p>Doctor was not found.</p>"
+          }
+        ],
+        "Error 5xx": [
+          {
+            "group": "Error 5xx",
+            "optional": false,
+            "field": "500",
+            "description": "<p>Internal Server Error</p>"
+          }
+        ]
+      }
+    },
+    "filename": "src/controllers/doctors-controller.js",
+    "groupTitle": "Doctors"
+  },
+  {
+    "type": "get",
+    "url": "api/doctors",
+    "title": "Search Doctors",
+    "name": "search_doctors",
+    "group": "Doctors",
+    "version": "1.0.0",
+    "description": "<p>This endpoint returns a list of doctors satisfying the search filters and queries specified in the request.</p>",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "query",
+            "description": "<p>Doctor's name.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "city",
+            "description": "<p>City or any part of the address.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "speciality",
+            "description": "<p>Doctor's speciality</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 2xx": [
+          {
+            "group": "Success 2xx",
+            "optional": false,
+            "field": "200",
+            "description": "<p>OK</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n   \"success\": true,\n   \"data\": [\n       {\n           \"_id\": \"5b1294ec3924ee271838b530\",\n           \"name\": \"John Doe\",\n           \"speciality\": {\n               \"_id\": \"5afec038c10c3f372c71cdf3\",\n               \"name\": \"Allergists\"\n           },\n           \"clinic\": \"Lege\",\n           \"address\": \"Stranden 89, 0250 Oslo Norway\",\n           \"phone\": \"94161140\"\n       }\n   ]\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "404",
+            "description": "<p>No doctors were found. Please adjust your search query.</p>"
+          }
+        ],
+        "Error 5xx": [
+          {
+            "group": "Error 5xx",
+            "optional": false,
+            "field": "500",
+            "description": "<p>Internal Server Error</p>"
+          }
+        ]
+      }
+    },
+    "filename": "src/controllers/doctors-controller.js",
+    "groupTitle": "Doctors"
+  },
+  {
     "type": "get",
     "url": "api/specialities",
     "title": "Get All Specialities",
@@ -50,13 +255,13 @@ define({ "api": [
     "groupTitle": "Specialities"
   },
   {
-    "type": "delete",
+    "type": "put",
     "url": "api/users",
     "title": "Delete User",
     "name": "delete_user",
     "group": "Users",
     "version": "1.0.0",
-    "description": "<p>An authorized user can delete their own user account. This request retrieves the user id from the authorization header and deletes the corresponding user.</p>",
+    "description": "<p>An authorized user can delete their own user account. This request retrieves the user id from the authorization header and deletes the corresponding user.</p> <p>This resource is protected. Therefore, you must include <code>Authorization: Bearer token</code> header.</p>",
     "header": {
       "fields": {
         "Authorization Header": [
@@ -115,7 +320,7 @@ define({ "api": [
     "name": "get_user",
     "group": "Users",
     "version": "1.0.0",
-    "description": "<p>An authorized user can view their own user information. This request retrieves the user id from the authorization header and returns the corresponding user data.</p>",
+    "description": "<p>An authorized user can view their own user information. This request retrieves the user id from the authorization header and returns the corresponding user data.</p> <p>This resource is protected. Therefore, you must include <code>Authorization: Bearer token</code> header.</p>",
     "header": {
       "fields": {
         "Authorization Header": [
@@ -299,7 +504,7 @@ define({ "api": [
     "name": "update_user",
     "group": "Users",
     "version": "1.0.0",
-    "description": "<p>An authorized user can modify their own user profile. This request retrieves the user id from the authorization header and modifies the corresponding user data.</p>",
+    "description": "<p>An authorized user can modify their own user profile. This request retrieves the user id from the authorization header and modifies the corresponding user data.</p> <p>This resource is protected. Therefore, you must include <code>Authorization: Bearer token</code> header.</p>",
     "header": {
       "fields": {
         "Authorization Header": [
