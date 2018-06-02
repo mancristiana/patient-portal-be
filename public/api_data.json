@@ -1,6 +1,199 @@
 [
   {
     "type": "post",
+    "url": "api/appointments/:id",
+    "title": "Book Appointment",
+    "name": "book_appointment",
+    "group": "Appointments",
+    "version": "1.0.0",
+    "description": "<p>This request books an appointment from the available timeslots for the authenticated patient. The appointment details such as time, address and doctor are preset. To read more about getting all available timeslots, see: <a href=\"#api-Doctors-get_doctor_timeslots\">Get Doctor Timeslots</a></p> <p>This resource is protected. Therefore, you must include <code>Authorization: Bearer token</code> header.</p>",
+    "header": {
+      "fields": {
+        "Authorization Header": [
+          {
+            "group": "Authorization Header",
+            "type": "String",
+            "allowedValues": [
+              "\"Bearer :token\""
+            ],
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>Replace <code>:token</code> with supplied Auth Token</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "id",
+            "description": "<p>Unique id of a free timeslot listed under a selected doctor. To read more about getting all available timeslots, see: <a href=\"#api-Doctors-get_doctor_timeslots\">Get Doctor Timeslots</a></p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 2xx": [
+          {
+            "group": "Success 2xx",
+            "optional": false,
+            "field": "200",
+            "description": "<p>User was successfully created</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n  \"success\": true\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "401",
+            "description": "<p>Unauthorized</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "404",
+            "description": "<p>Appointment not found</p>"
+          }
+        ],
+        "Error 5xx": [
+          {
+            "group": "Error 5xx",
+            "optional": false,
+            "field": "500",
+            "description": "<p>Internal Server Error</p>"
+          }
+        ]
+      }
+    },
+    "filename": "src/controllers/appointments-controller.js",
+    "groupTitle": "Appointments"
+  },
+  {
+    "type": "delete",
+    "url": "api/appointments/:id",
+    "title": "Cancel Appointment",
+    "name": "cancel_appointment",
+    "group": "Appointments",
+    "version": "1.0.0",
+    "description": "<p>This resource is protected. Therefore, you must include <code>Authorization: Bearer token</code> header.</p>",
+    "header": {
+      "fields": {
+        "Authorization Header": [
+          {
+            "group": "Authorization Header",
+            "type": "String",
+            "allowedValues": [
+              "\"Bearer :token\""
+            ],
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>Replace <code>:token</code> with supplied Auth Token</p>"
+          }
+        ]
+      }
+    },
+    "filename": "src/controllers/appointments-controller.js",
+    "groupTitle": "Appointments"
+  },
+  {
+    "type": "get",
+    "url": "api/appointments",
+    "title": "Get All Appointments",
+    "name": "get_all_appointment",
+    "group": "Appointments",
+    "version": "1.0.0",
+    "description": "<p>This endpoint allows an authenticated patient to see all of their own appointments.</p> <p>This resource is protected. Therefore, you must include <code>Authorization: Bearer token</code> header.</p>",
+    "header": {
+      "fields": {
+        "Authorization Header": [
+          {
+            "group": "Authorization Header",
+            "type": "String",
+            "allowedValues": [
+              "\"Bearer :token\""
+            ],
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>Replace <code>:token</code> with supplied Auth Token</p>"
+          }
+        ]
+      }
+    },
+    "filename": "src/controllers/appointments-controller.js",
+    "groupTitle": "Appointments"
+  },
+  {
+    "type": "get",
+    "url": "api/appointments/:id",
+    "title": "Get Appointment By Id",
+    "name": "get_appointment_by_id",
+    "group": "Appointments",
+    "version": "1.0.0",
+    "description": "<p>This endpoint allows an authenticated patient to select and view a single appointment from their own list of appointments.</p> <p>This resource is protected. Therefore, you must include <code>Authorization: Bearer token</code> header.</p>",
+    "header": {
+      "fields": {
+        "Authorization Header": [
+          {
+            "group": "Authorization Header",
+            "type": "String",
+            "allowedValues": [
+              "\"Bearer :token\""
+            ],
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>Replace <code>:token</code> with supplied Auth Token</p>"
+          }
+        ]
+      }
+    },
+    "filename": "src/controllers/appointments-controller.js",
+    "groupTitle": "Appointments"
+  },
+  {
+    "type": "put",
+    "url": "api/appointments/:id",
+    "title": "Update Appointment",
+    "name": "update_appointment",
+    "group": "Appointments",
+    "version": "1.0.0",
+    "description": "<p>This resource is protected. Therefore, you must include <code>Authorization: Bearer token</code> header.</p>",
+    "header": {
+      "fields": {
+        "Authorization Header": [
+          {
+            "group": "Authorization Header",
+            "type": "String",
+            "allowedValues": [
+              "\"Bearer :token\""
+            ],
+            "optional": false,
+            "field": "Authorization",
+            "description": "<p>Replace <code>:token</code> with supplied Auth Token</p>"
+          }
+        ]
+      }
+    },
+    "filename": "src/controllers/appointments-controller.js",
+    "groupTitle": "Appointments"
+  },
+  {
+    "type": "post",
     "url": "auth",
     "title": "Login",
     "name": "login",
@@ -125,6 +318,69 @@
       }
     },
     "filename": "src/controllers/doctors-controller.js",
+    "groupTitle": "Doctors"
+  },
+  {
+    "type": "get",
+    "url": "api/doctor/:id/timeslots",
+    "title": "Get Doctor Timeslots",
+    "name": "get_doctor_timeslots",
+    "group": "Doctors",
+    "version": "1.0.0",
+    "description": "<p>This endpoint returns the available timeslots of doctors with the specified unique id.</p>",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "id",
+            "description": "<p>Doctor's unique id.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 2xx": [
+          {
+            "group": "Success 2xx",
+            "optional": false,
+            "field": "200",
+            "description": "<p>OK</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n    \"success\": true,\n    \"data\": [\n        {\n            \"_id\": \"5b1281723924ee271838b4ce\",\n            \"doctor\": \"5afde7ec734d1d7d453ec63c\",\n            \"time\": \"03-06-2018 10:00\",\n            \"duration\": 30,\n            \"patient\": null,\n            \"description\": \"\"\n        },\n        {\n            \"_id\": \"5b1281723924ee271838b4cf\",\n            \"doctor\": \"5afde7ec734d1d7d453ec63c\",\n            \"time\": \"03-06-2018 10:30\",\n            \"duration\": 30,\n            \"patient\": null,\n            \"description\": \"\"\n        }\n    ]\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "404",
+            "description": "<p>Doctor was not found.</p>"
+          }
+        ],
+        "Error 5xx": [
+          {
+            "group": "Error 5xx",
+            "optional": false,
+            "field": "500",
+            "description": "<p>Internal Server Error</p>"
+          }
+        ]
+      }
+    },
+    "filename": "src/controllers/appointments-controller.js",
     "groupTitle": "Doctors"
   },
   {

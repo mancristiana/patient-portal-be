@@ -174,6 +174,7 @@ module.exports.updateUser = async function(req, res) {
  * @apiHeader (Authorization Header) {String="Bearer :token"} Authorization Replace <code>:token</code> with supplied Auth Token
  *
  * @apiSuccess (Success 2xx) 204 User was successfully deleted
+ * @apiError (Error 4xx) 401 Unauthorized
  * @apiError (Error 4xx) 404 User was not found
  * @apiError (Error 5xx) 500 Internal Server Error
  */
