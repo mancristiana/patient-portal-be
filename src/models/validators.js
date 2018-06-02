@@ -2,6 +2,15 @@ const validate = require('mongoose-validator');
 const uniqueValidator = require('mongoose-unique-validator');
 const moment = require('moment');
 
+const validateDateTime = function(value) {
+  return moment(value, 'DD-MM-YYYY HH:mm', true).isValid();
+};
+
+const validateNorwegianIdNumber = function(value) {
+  let date = value.slice(0, 6);
+  return moment(date, 'DDMMYY', true).isValid();
+};
+
 module.exports.uniqueValidator = uniqueValidator;
 
 // See: https://github.com/leepowellcouk/mongoose-validator
@@ -25,11 +34,6 @@ module.exports.phone = [
   })
 ];
 
-const validateNorwegianIdNumber = function(value) {
-  let date = value.slice(0, 6);
-  return moment(date, 'DDMMYY', true).isValid();
-};
-
 module.exports.nationalId = [
   validate({
     validator: 'isNumeric',
@@ -46,5 +50,12 @@ module.exports.nationalId = [
   validate({
     validator: validateNorwegianIdNumber,
     message: 'Norwegian National ID is not valid'
+  })
+];
+
+module.exports.dateTime = [
+  validate({
+    validator: validateDateTime,
+    message: 'Date and time provided are not valid'
   })
 ];

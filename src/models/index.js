@@ -18,5 +18,6 @@ module.exports = {
   db: db,
   Speciality: require('./speciality'),
   User: require('./user'),
-  Doctor: require('./doctor')
+  Doctor: require('./doctor'),
+  Appointment: require('./appointment')
 };

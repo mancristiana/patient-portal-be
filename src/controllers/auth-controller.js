@@ -33,10 +33,10 @@ module.exports.login = async function(req, res) {
   return responseSuccess(res, response);
 };
 
-module.exports.authenticate = function(req, res, next) {
+module.exports.authorize = async function(req, res, next) {
   let authHeader = req.get('Authorization');
   if (!authHeader) {
-    return responseError(res, { message: 'Unauthorized' }, 401);
+    return responseError(res, null, 401);
   }
 
   let token = authHeader.replace('Bearer ', '');
@@ -47,7 +47,17 @@ module.exports.authenticate = function(req, res, next) {
     return responseError(res, { message: result.error }, 401);
   }
 
-  req.userId = result.payload.id;
+  // Make sure that the user exists
+  let userId = result.payload.id;
+  let error, user;
+  [user, error] = await to(User.findOne({ _id: userId }));
+  if (error || !user) {
+    return responseError(res, null, 401);
+  }
+
+  // Send the user and id to the next middleware on the express stack
+  req.userId = userId;
+  req.user = user;
   next();
 };
 
