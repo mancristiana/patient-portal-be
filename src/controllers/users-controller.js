@@ -1,5 +1,48 @@
 const User = require('../models').User;
 
+/**
+ * @api {post} api/users Register User
+ * @apiName register-user
+ * @apiGroup Users
+ * @apiVersion 1.0.0
+ *
+ * @apiDescription This request creates a new user on the patient platform.
+ * By default the new user is assigned the patient role and all it's corresponding privileges.
+ *
+ * @apiParam {String} email         Unique Email used for logging into the account
+ * @apiParam {String} password      Password used for logging into the account
+ * @apiParam {String} name          Full name of the user
+ * @apiParam {String} nationalId    Unique Norwegian national id number
+ * @apiParam {String} phone         Unique Norwegian phone number
+ * @apiParam {String} address       Address
+ *
+ * @apiParamExample {json} Request body
+ * {
+ *     "email": "test@test.com",
+ *     "password": "qwer1234",
+ *     "name": "Test 4",
+ *     "nationalId": "12037671637",
+ *     "phone": "35001237",
+ *     "address": "Terminalgade 2, 2770 Kastrup"
+ * }
+ *
+ * @apiSuccess (Success 2xx) 200 User was successfully created
+ * @apiSuccessExample {json} Success-Response:
+ * HTTP/1.1 200 OK
+ * {
+ *   "success": true
+ * }
+ *
+ * @apiError (Error 4xx) 409 Conflict
+ * @apiError (Error 5xx) 500 Internal Server Error
+ * @apiErrorExample (Error 4xx) 409 Conflict
+ * {
+ *     "success": false,
+ *     "error": "Conflict registering new user. User email, phone and national Id must be unique"
+ * }
+ *
+ */
+
 module.exports.createUser = async function(req, res) {
   let error, user, response;
   const newUser = new User(req.body);
@@ -25,43 +68,38 @@ module.exports.createUser = async function(req, res) {
 };
 
 /**
- * @api {get} /api/users Get User
+ * @api {get} api/users Get User
  * @apiName get-user
- * @apiGroup users
+ * @apiGroup Users
  * @apiVersion 1.0.0
  *
- * @apiDescription This request returns a user from ID
+ * @apiDescription An authorized user can view their own user information.
+ * This request retrieves the user id from the authorization header and returns the corresponding user data.
  *
- * @apiSuccess (User Fields) {String} _id Unique Mongo generated id of the User.
- * @apiSuccess (User Fields) {String} email Email of the User.
- * @apiSuccess (User Fields) {int} nationalID NationalID of the User.
- * @apiSuccess (User Fields) {String} phone Phone of the User.
+ * @apiHeader (Authorization Header) {String="Bearer :token"} Authorization Replace <code>:token</code> with supplied Auth Token
  *
+ * @apiSuccess (Success 2xx) 200 OK
  * @apiSuccessExample {json} Success-Response:
- *   HTTP/1.1 200 OK
- *   [
- *       {
- *           "_id": "573ec098e85f5601f611322b",
- *           "Email": "preprem@gmail.com",
- *           "phone": "+45 27 29 29 64"
- *       },
- *       {
- *           "_id": "573ec098e85f5601f611322b",
- *           "Email": "dadasd@gmail.com",
- *           "phone": "+45 63 63 63 63"
- *       }
- *   ]
+ * HTTP/1.1 200 OK
+ * {
+ *     "success": true,
+ *     "data": {
+ *         "name": "Cristiana Madnddn",
+ *         "email": "test@test.com",
+ *         "nationalId": "12037671531",
+ *         "phone": "35001230",
+ *         "address": "Terminalgade 2, 2770 Kastrup"
+ *     }
+ * }
  *
+ * @apiError (Error 4xx) 401 Unauthorized
+ * @apiError (Error 4xx) 404 User was not found
  * @apiError (Error 5xx) 500 Internal Server Error
  *
  */
 
 module.exports.getUser = async function(req, res) {
-  let error, user;
-  [user, error] = await to(User.findOne({ _id: req.userId }));
-  if (error) {
-    return responseError(res, error);
-  }
+  let user = req.user;
 
   if (!user) {
     return responseError(res, { message: 'User was not found' }, 404);
@@ -69,6 +107,38 @@ module.exports.getUser = async function(req, res) {
 
   return responseSuccess(res, user.getProfile());
 };
+
+/**
+ * @api {post} api/users Update User Profile
+ * @apiName update-user
+ * @apiGroup Users
+ * @apiVersion 1.0.0
+ *
+ * @apiDescription An authorized user can modify their own user profile.
+ * This request retrieves the user id from the authorization header and modifies the corresponding user data.
+ *
+ * @apiHeader (Authorization Header) {String="Bearer :token"} Authorization Replace <code>:token</code> with supplied Auth Token
+ *
+ * @apiParamExample {json} Update account
+ * {
+ *     "email": "test@test.com",
+ *     "password": "qwer1234",
+ * }
+ *
+ * @apiParamExample {json} Update profile
+ * {
+ *     "name": "Test 4",
+ *     "nationalId": "12037671637",
+ *     "phone": "35001237",
+ *     "address": "Terminalgade 2, 2770 Kastrup"
+ * }
+ *
+ * @apiSuccess (Success 2xx) 200 User was successfully updated
+ * @apiError (Error 4xx) 401 Unauthorized
+ * @apiError (Error 4xx) 404 User was not found
+ * @apiError (Error 5xx) 500 Internal Server Error
+ *
+ */
 
 module.exports.updateUser = async function(req, res) {
   let error, result;
@@ -85,6 +155,22 @@ module.exports.updateUser = async function(req, res) {
 
   return responseSuccess(res, null);
 };
+
+/**
+ * @api {delete} api/users Delete User
+ * @apiName delete-user
+ * @apiGroup Users
+ * @apiVersion 1.0.0
+ *
+ * @apiDescription An authorized user can delete their own user account.
+ * This request retrieves the user id from the authorization header and deletes the corresponding user.
+ *
+ * @apiHeader (Authorization Header) {String="Bearer :token"} Authorization Replace <code>:token</code> with supplied Auth Token
+ *
+ * @apiSuccess (Success 2xx) 204 User was successfully deleted
+ * @apiError (Error 4xx) 404 User was not found
+ * @apiError (Error 5xx) 500 Internal Server Error
+ */
 
 module.exports.deleteUser = async function(req, res) {
   let error, result;

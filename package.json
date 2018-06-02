@@ -45,6 +45,6 @@
   "apidoc": {
     "name": "Patient Portal API",
     "title": "Patient Portal API",
-    "url": "https://patient-portal-be.herokuapp.com/api"
+    "url": "https://patient-portal-be.herokuapp.com/"
   }
 }
