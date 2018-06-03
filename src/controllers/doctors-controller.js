@@ -41,9 +41,9 @@ const regex = function(value) {
  *
  */
 module.exports.search = async function(req, res) {
-  const queryParam = req.param('query');
-  const cityParam = req.param('city');
-  const specialityParam = req.param('speciality');
+  const queryParam = req.params.query;
+  const cityParam = req.params.city;
+  const specialityParam = req.params.speciality;
 
   let findOptions = {};
   Object.assign(
@@ -113,7 +113,7 @@ module.exports.search = async function(req, res) {
  */
 
 module.exports.getDoctor = async function(req, res) {
-  const doctorId = req.param('id');
+  const doctorId = req.params.id;
   let error, doctor;
   [doctor, error] = await to(
     Doctor.findOne({ _id: doctorId })

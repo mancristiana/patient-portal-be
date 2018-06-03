@@ -32,6 +32,8 @@ app.use(logger('common'));
 app.use('/', routes);
 
 // Use Handlers
+app.use(handlers.logErrors);
+app.use(handlers.badRequest);
 app.use(handlers.notFound);
 app.use(handlers.error);
 

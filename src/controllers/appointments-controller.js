@@ -41,7 +41,7 @@ const { Appointment, Doctor } = require('../models');
  */
 module.exports.getTimeslots = async function(req, res) {
   let error, doctor, timeslots, findOptions;
-  const doctorId = req.param('id');
+  const doctorId = req.params.id;
   [doctor, error] = await to(Doctor.findOne({ _id: doctorId }));
   if (error) {
     return responseError(res, error);
@@ -100,7 +100,7 @@ module.exports.getTimeslots = async function(req, res) {
  *         }
  *     ]
  * }
- * 
+ *
  * @apiError (Error 4xx) 401 Unauthorized
  * @apiError (Error 4xx) 404 No appointments were found
  * @apiError (Error 5xx) 500 Internal Server Error
@@ -121,11 +121,7 @@ module.exports.getAll = async function(req, res) {
   }
 
   if (!appointments || appointments.length === 0) {
-    return responseError(
-      res,
-      { message: 'No appointments were found.' },
-      404
-    );
+    return responseError(res, { message: 'No appointments were found.' }, 404);
   }
 
   return responseSuccess(res, appointments);
@@ -141,9 +137,9 @@ module.exports.getAll = async function(req, res) {
  *
  * This resource is protected. Therefore, you must include <code>Authorization: Bearer token</code> header.
  * @apiHeader (Authorization Header) {String="Bearer :token"} Authorization Replace <code>:token</code> with supplied Auth Token
- * 
+ *
  * @apiParam {String} id Appointment's unique id.
- * 
+ *
  * @apiSuccess (Success 2xx) 200 OK
  * @apiSuccessExample {json} Success-Response:
  * HTTP/1.1 200 OK
@@ -168,7 +164,7 @@ module.exports.getAll = async function(req, res) {
  *         "description": ""
  *     }
  * }
- * 
+ *
  * @apiError (Error 4xx) 401 Unauthorized
  * @apiError (Error 4xx) 404 Appointment was not found
  * @apiError (Error 5xx) 500 Internal Server Error
@@ -179,7 +175,7 @@ module.exports.getAppointment = async function(req, res) {
   [appointment, error] = await to(
     Appointment.findOne({
       patient: req.userId,
-      _id: req.param('id')
+      _id: req.params.id
     })
       .populate({ path: 'doctor', populate: { path: 'speciality' } })
       .exec()
@@ -257,7 +253,7 @@ module.exports.createAppointment = async function(req, res) {
  * {
  *	"description": "This is a message from patient to doctor."
  * }
- * 
+ *
  * @apiSuccess (Success 2xx) 200 OK Appointment was successfully updated
  * @apiError (Error 4xx) 401 Unauthorized
  * @apiError (Error 4xx) 404 Appointment was not found
