@@ -47,7 +47,7 @@ module.exports.login = async function(req, res) {
   let error, user, correct, response;
   [user, error] = await to(User.findOne({ email: req.body.email }));
   // User was not found
-  if (error) {
+  if (error || !user) {
     return responseError(
       res,
       { message: 'Provided credentials are incorrect' },
