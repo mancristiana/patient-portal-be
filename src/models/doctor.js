@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const validate = require('./validators');
+const helpers = require('./helpers');
 
 let doctorSchema = mongoose.Schema({
   name: { type: String, required: true },
@@ -17,12 +18,22 @@ let doctorSchema = mongoose.Schema({
   address: { type: String, required: true }
 });
 
-doctorSchema.methods.toWeb = function() {
-  return {
-    name: this.name,
-    phone: this.phone,
-    address: this.address
-  };
+doctorSchema.methods.toText = function() {
+  return this.name + this.clinic + this.address + this.speciality.name;
+};
+
+doctorSchema.methods.filterByQuery = function(query) {
+  const matches = helpers.matches;
+  const text = this.toText();
+
+  if (typeof query === 'string') {
+    return matches(text, query);
+  }
+
+  if (Array.isArray(query)) {
+    let matched = query.filter(item => matches(text, item));
+    return matched.length > 0;
+  }
 };
 
 // Create the model for users and expose it to our app

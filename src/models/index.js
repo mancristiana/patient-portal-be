@@ -19,5 +19,6 @@ module.exports = {
   Speciality: require('./speciality'),
   User: require('./user'),
   Doctor: require('./doctor'),
-  Appointment: require('./appointment')
+  Appointment: require('./appointment'),
+  Helpers: require('./helpers')
 };

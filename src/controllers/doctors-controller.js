@@ -1,8 +1,5 @@
-const Doctor = require('../models').Doctor;
-
-const regex = function(value) {
-  return new RegExp(`.*${value}.*`, 'i');
-};
+const { Doctor, Helpers } = require('../models');
+const regex = Helpers.searchRegex;
 
 /**
  * @api {get} api/doctors Search Doctors
@@ -40,17 +37,14 @@ const regex = function(value) {
  * @apiError (Error 5xx) 500 Internal Server Error
  *
  */
+
 module.exports.search = async function(req, res) {
-  const queryParam = req.params.query;
-  const cityParam = req.params.city;
-  const specialityParam = req.params.speciality;
+  const queryParam = req.query.query;
+  const cityParam = req.query.city;
+  const specialityParam = req.query.speciality;
 
   let findOptions = {};
-  Object.assign(
-    findOptions,
-    queryParam ? { name: regex(queryParam) } : null,
-    cityParam ? { address: regex(cityParam) } : null
-  );
+  Object.assign(findOptions, cityParam ? { address: regex(cityParam) } : null);
 
   let error, doctors;
   [doctors, error] = await to(
@@ -66,6 +60,10 @@ module.exports.search = async function(req, res) {
     doctors = doctors.filter(doctor =>
       doctor.speciality.name.match(regex(specialityParam))
     );
+  }
+
+  if (queryParam) {
+    doctors = doctors.filter(doctor => doctor.filterByQuery(queryParam));
   }
 
   if (!doctors || doctors.length === 0) {
