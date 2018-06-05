@@ -9,7 +9,10 @@ const regex = Helpers.searchRegex;
  *
  * @apiDescription This endpoint returns a list of doctors satisfying the search filters and queries specified in the request.
  *
- * @apiParam {String} [query]       Doctor's name.
+ * @apiParam {String} [query]       Either part of doctor's name, speciality, clinic or part of address.
+ * The API supports multi word searches.
+ * This means we can pass multiple query parameters like so: <code>/query=value1&query=value2</code>.
+ * In this case the API returns doctors matching at least one of the query values, the logical operation between them being <code>OR</code>.
  * @apiParam {String} [city]        City or any part of the address.
  * @apiParam {String} [speciality]  Doctor's speciality
  *

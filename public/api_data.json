@@ -91,7 +91,7 @@
     "name": "cancel_appointment",
     "group": "Appointments",
     "version": "1.0.0",
-    "description": "<p>This resource is protected. Therefore, you must include <code>Authorization: Bearer token</code> header.</p>",
+    "description": "<p>This endpoint allow an authorized patient to delete an appointment. In this case the appointment becomes an available timeslot in the doctor's calendar.</p> <p>This resource is protected. Therefore, you must include <code>Authorization: Bearer token</code> header.</p>",
     "header": {
       "fields": {
         "Authorization Header": [
@@ -104,6 +104,44 @@
             "optional": false,
             "field": "Authorization",
             "description": "<p>Replace <code>:token</code> with supplied Auth Token</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 2xx": [
+          {
+            "group": "Success 2xx",
+            "optional": false,
+            "field": "200",
+            "description": "<p>OK Appointment was successfully deleted</p>"
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "401",
+            "description": "<p>Unauthorized</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "404",
+            "description": "<p>Appointment was not found</p>"
+          }
+        ],
+        "Error 5xx": [
+          {
+            "group": "Error 5xx",
+            "optional": false,
+            "field": "500",
+            "description": "<p>Internal Server Error</p>"
           }
         ]
       }
@@ -135,6 +173,51 @@
         ]
       }
     },
+    "success": {
+      "fields": {
+        "Success 2xx": [
+          {
+            "group": "Success 2xx",
+            "optional": false,
+            "field": "200",
+            "description": "<p>OK</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n    \"success\": true,\n    \"data\": [\n        {\n            \"_id\": \"5b1281723924ee271838b4d1\",\n            \"doctor\": {\n                \"_id\": \"5afde7ec734d1d7d453ec63c\",\n                \"name\": \"Michael Bertson\",\n                \"speciality\": {\n                    \"_id\": \"5afec038c10c3f372c71cdf2\",\n                    \"name\": \"Acupuncturists\"\n                },\n                \"clinic\": \"Nova\",\n                \"address\": \"Ragnagade 7, 2100 København\",\n                \"phone\": \"70228190\"\n            },\n            \"time\": \"03-06-2018 11:30\",\n            \"duration\": 30,\n            \"patient\": \"5b11704ac5e43601680d381d\",\n            \"description\": \"\"\n        }\n    ]\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "401",
+            "description": "<p>Unauthorized</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "404",
+            "description": "<p>No appointments were found</p>"
+          }
+        ],
+        "Error 5xx": [
+          {
+            "group": "Error 5xx",
+            "optional": false,
+            "field": "500",
+            "description": "<p>Internal Server Error</p>"
+          }
+        ]
+      }
+    },
     "filename": "src/controllers/appointments-controller.js",
     "groupTitle": "Appointments"
   },
@@ -162,6 +245,64 @@
         ]
       }
     },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "id",
+            "description": "<p>Appointment's unique id.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 2xx": [
+          {
+            "group": "Success 2xx",
+            "optional": false,
+            "field": "200",
+            "description": "<p>OK</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n    \"success\": true,\n    \"data\": {\n        \"_id\": \"5b1281723924ee271838b4d1\",\n        \"doctor\": {\n            \"_id\": \"5afde7ec734d1d7d453ec63c\",\n            \"name\": \"Michael Bertson\",\n            \"speciality\": {\n                \"_id\": \"5afec038c10c3f372c71cdf2\",\n                \"name\": \"Acupuncturists\"\n            },\n            \"clinic\": \"Nova\",\n            \"address\": \"Ragnagade 7, 2100 København\",\n            \"phone\": \"70228190\"\n        },\n        \"time\": \"03-06-2018 11:30\",\n        \"duration\": 30,\n        \"patient\": \"5b11704ac5e43601680d381d\",\n        \"description\": \"\"\n    }\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "401",
+            "description": "<p>Unauthorized</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "404",
+            "description": "<p>Appointment was not found</p>"
+          }
+        ],
+        "Error 5xx": [
+          {
+            "group": "Error 5xx",
+            "optional": false,
+            "field": "500",
+            "description": "<p>Internal Server Error</p>"
+          }
+        ]
+      }
+    },
     "filename": "src/controllers/appointments-controller.js",
     "groupTitle": "Appointments"
   },
@@ -172,7 +313,7 @@
     "name": "update_appointment",
     "group": "Appointments",
     "version": "1.0.0",
-    "description": "<p>This resource is protected. Therefore, you must include <code>Authorization: Bearer token</code> header.</p>",
+    "description": "<p>An autorized patient can update the description of their own appointments to include symptoms or send a message to the doctor or clinic. This resource is protected. Therefore, you must include <code>Authorization: Bearer token</code> header.</p>",
     "header": {
       "fields": {
         "Authorization Header": [
@@ -185,6 +326,53 @@
             "optional": false,
             "field": "Authorization",
             "description": "<p>Replace <code>:token</code> with supplied Auth Token</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "examples": [
+        {
+          "title": "Update account",
+          "content": "{\n\t\"description\": \"This is a message from patient to doctor.\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "success": {
+      "fields": {
+        "Success 2xx": [
+          {
+            "group": "Success 2xx",
+            "optional": false,
+            "field": "200",
+            "description": "<p>OK Appointment was successfully updated</p>"
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "401",
+            "description": "<p>Unauthorized</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "404",
+            "description": "<p>Appointment was not found</p>"
+          }
+        ],
+        "Error 5xx": [
+          {
+            "group": "Error 5xx",
+            "optional": false,
+            "field": "500",
+            "description": "<p>Internal Server Error</p>"
           }
         ]
       }
@@ -399,7 +587,7 @@
             "type": "String",
             "optional": true,
             "field": "query",
-            "description": "<p>Doctor's name.</p>"
+            "description": "<p>Either part of doctor's name, speciality, clinic or part of address. The API supports multi word searches. This means we can pass multiple query parameters like so: <code>/query=value1&amp;query=value2</code>. In this case the API returns doctors matching at least one of the query values, the logical operation between them being <code>OR</code>.</p>"
           },
           {
             "group": "Parameter",
@@ -549,6 +737,12 @@
     "error": {
       "fields": {
         "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "401",
+            "description": "<p>Unauthorized</p>"
+          },
           {
             "group": "Error 4xx",
             "optional": false,
