@@ -17,5 +17,13 @@ let appointmentSchema = mongoose.Schema({
   time: { type: String, validate: validate.dateTime }
 });
 
+appointmentSchema.set('toJSON', {
+  transform: function(doc, ret, options) {
+    ret.id = ret._id;
+    delete ret._id;
+    delete ret.__v;
+  }
+});
+
 // Create the model for users and expose it to our app
 module.exports = mongoose.model('Appointment', appointmentSchema);

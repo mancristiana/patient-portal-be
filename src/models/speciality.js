@@ -4,12 +4,12 @@ let specialitySchema = mongoose.Schema({
   name: String
 });
 
-specialitySchema.methods.toWeb = function() {
-  //let json = this.toJSON();
-  let json = {};
-  json.id = this._id; //this is for the front end
-  json.name = this.name;
-  return json;
-};
+specialitySchema.set('toJSON', {
+  transform: function(doc, ret, options) {
+    ret.id = ret._id;
+    delete ret._id;
+    delete ret.__v;
+  }
+});
 
 module.exports = mongoose.model('Speciality', specialitySchema);

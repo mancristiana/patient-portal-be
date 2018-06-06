@@ -35,6 +35,14 @@ let userSchema = mongoose.Schema({
 });
 userSchema.plugin(validate.uniqueValidator);
 
+userSchema.set('toJSON', {
+  transform: function(doc, ret, options) {
+    ret.id = ret._id;
+    delete ret._id;
+    delete ret.__v;
+  }
+});
+
 userSchema.pre('save', async function(next) {
   if (this.isModified('password')) {
     this.password = await this.hashPassword(this.password);
